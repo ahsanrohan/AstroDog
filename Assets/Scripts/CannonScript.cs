@@ -10,8 +10,12 @@ public class CannonScript : MonoBehaviour
     private Transform shootPosition;
     private Transform basePosition;
     public GameObject Dog = null;
+
+    [SerializeField] float rotateClockwise = -0.5f;
+    [SerializeField] float rotateCounterClockwise = 0.5f;
     void Start()
     {
+
     }
 
     // Update is called once per frame
@@ -27,15 +31,21 @@ public class CannonScript : MonoBehaviour
         {
             shoot();
         }
-        float moveHorizontal = Input.GetAxis("Horizontal");
+        //float moveHorizontal = Input.GetAxis("Horizontal");
         if (Input.GetKeyDown(KeyCode.A))
         {
-            basePosition.parent.Rotate(Vector3.forward, 15, Space.Self);
+            if (basePosition.parent.rotation.z < rotateCounterClockwise)
+            {
+                basePosition.parent.Rotate(Vector3.forward, 15, Space.Self);
+            }
             Debug.Log(basePosition.rotation);
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            basePosition.parent.Rotate(Vector3.forward, -15, Space.Self);
+            if (basePosition.parent.rotation.z > rotateClockwise)
+            {
+                basePosition.parent.Rotate(Vector3.forward, -15, Space.Self);
+            }
             Debug.Log(basePosition.rotation);
         }
         //Debug.Log(shootPosition.parent.position);
