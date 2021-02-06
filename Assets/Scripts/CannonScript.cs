@@ -11,13 +11,13 @@ public class CannonScript : MonoBehaviour
     public GameObject Dog = null;
     void Start()
     {
-        basePosition = gameObject.transform.Find("CannonBase");
-        shootPosition = basePosition.transform.Find("CannonHead");    
     }
 
     // Update is called once per frame
     void Update()
     {
+        basePosition = GameObject.Find("CannonBase").transform;
+        shootPosition = GameObject.Find("CannonHead").transform;    
         if(Input.GetKeyDown(KeyCode.G))
         {
             shoot();
@@ -34,11 +34,14 @@ public class CannonScript : MonoBehaviour
 
     private void shoot()
     {
-        GameObject dog = Instantiate(Dog, shootPosition.position, Quaternion.identity);
+        // GameObject dog = Instantiate(Dog, shootPosition.position, Quaternion.identity);
+
+        GameObject dog = GameObject.Find("bubble");
         Rigidbody2D rb = dog.GetComponent<Rigidbody2D>();
         //Debug.Log(power);
         //Debug.Log(shootPosition.forward * power);
         //Vector2 forceVec = new Vector2(power, power);
-        rb.AddForce(new Vector2(0, power));
+        Vector2 shootDir = new Vector2(shootPosition.position.x - basePosition.position.x, shootPosition.position.y - basePosition.position.y);
+        rb.velocity = (power*shootDir);
     }
 }
