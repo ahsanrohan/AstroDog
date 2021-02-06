@@ -17,9 +17,16 @@ public class CannonScript : MonoBehaviour
     public static bool debugKeyboard = true;
 
     inputProsessor ip;
+    Rigidbody2D rb;
+
     void Start()
     {
+        rb = Dog.GetComponent<Rigidbody2D>();
+
+        //GetComponent<BoxCollider2D>().i
+
         ip = GameObject.Find("input_dashboard").GetComponent<inputProsessor>();
+
         basePosition = transform.Find("CannonBase").transform;
         shootPosition = transform.Find("CannonBase/Cannon/CannonHead").transform;
     }
@@ -27,12 +34,31 @@ public class CannonScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(debugKeyboard)
+        if (debugKeyboard)
         {
             debugUpdate();
             return;
         }
 
+        if (Dog.GetComponent<CircleCollider2D>().IsTouching(transform.GetComponent<BoxCollider2D>()))
+        {
+            if (!shot)
+            {
+                rb.velocity -= rb.velocity * 0.1f;
+                var delta = shootPosition.position - Dog.transform.position;
+
+                if (delta.magnitude < 0.2)
+                {
+                    Dog.transform.position = shootPosition.transform.position;
+                    rb.velocity = new Vector2(0, 0);
+                }
+                else
+                {
+                    var vel = delta.normalized * 100 * Time.deltaTime;
+                    rb.velocity += new Vector2(vel.x, vel.y);
+                }
+            }
+        }
 
 
     }
@@ -43,11 +69,23 @@ public class CannonScript : MonoBehaviour
         {
             if (!shot)
             {
-                Dog.transform.position += (shootPosition.position - Dog.transform.position);
+                rb.velocity -= rb.velocity * 0.1f;
+                var delta = shootPosition.position - Dog.transform.position;
+
+                if (delta.magnitude < 0.2)
+                {
+                    Dog.transform.position = shootPosition.transform.position;
+                    rb.velocity = new Vector2(0, 0);
+                }
+                else
+                {
+                    var vel = delta.normalized * 100 * Time.deltaTime;
+                    rb.velocity += new Vector2(vel.x, vel.y);
+                }
             }
             if (Input.GetKeyDown(KeyCode.G))
             {
-                shoot();
+                StartCoroutine(shoot());
             }
             if (Input.GetKeyDown(KeyCode.A))
             {
@@ -74,14 +112,16 @@ public class CannonScript : MonoBehaviour
         shot = false;
 
     }
-    private void shoot()
+    IEnumerator shoot()
     {
         // GameObject dog = Instantiate(Dog, shootPosition.position, Quaternion.identity);
 
-        Rigidbody2D rb = Dog.GetComponent<Rigidbody2D>();
         GameObject cannon = GameObject.Find("Cannon");
         Animator manimator = cannon.GetComponent<Animator>();
         manimator.SetTrigger("Shoot");
+
+        yield return new WaitForSeconds(0.35f);
+
         //  Debug.Log(GetComponent<float>.power);
         //Debug.Log(shootPosition.forward * power);
         //Vector2 forceVec = new Vector2(power, power);
