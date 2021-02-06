@@ -25,6 +25,9 @@ public class inputProsessor : MonoBehaviour
     ///0 to 1 floating point Center at 0.5
     public float y_joystick = 0;
 
+    private int RotteryE_counter = 0;
+    private int RotteryE_offset = 0;
+
     void Update()
     {
         string dataPacket = serialPort.ReadLine();
@@ -34,9 +37,18 @@ public class inputProsessor : MonoBehaviour
         x_joystick = (2.0f * int.Parse(split[0]) / 1023.0f)-1;
         y_joystick = (2.0f * int.Parse(split[1]) / 1023.0f)-1;
 
-
+        RotteryE_counter = int.Parse(split[2]);
 
     }
 
+    int getRottery_counter()
+    {
+        return RotteryE_counter - RotteryE_offset;
+    }
+
+    void resetRottery_counter()
+    {
+        RotteryE_offset = RotteryE_counter;
+    }
 
 }
