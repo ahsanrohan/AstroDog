@@ -6,49 +6,49 @@ public class CannonScript : MonoBehaviour
 {
     // Start is called before the first frame update
     bool shot = false;
-    [SerializeField] static float power;
+    public float power;
     private Transform shootPosition;
     private Transform basePosition;
     public GameObject Dog = null;
 
-    [SerializeField] float rotateClockwise = -0.5f;
-    [SerializeField] float rotateCounterClockwise = 0.5f;
+    public float rotateClockwise = -0.5f;
+    public float rotateCounterClockwise = 0.5f;
     void Start()
     {
-        
+        basePosition = transform.Find("CannonBase").transform;
+        shootPosition = transform.Find("CannonBase/Cannon/CannonHead").transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        basePosition = transform.Find("CannonBase").transform;
-        shootPosition = transform.Find("CannonBase/Cannon/CannonHead").transform;    
-        if (!shot)
+        if (Dog.GetComponent<CircleCollider2D>().IsTouching(transform.GetComponent<BoxCollider2D>()))
         {
-            Dog.transform.position = shootPosition.position;
-        }
-        if(Input.GetKeyDown(KeyCode.G))
-        {
-            shoot();
-        }
-        //float moveHorizontal = Input.GetAxis("Horizontal");
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            if (basePosition.parent.rotation.z < rotateCounterClockwise)
+            if (!shot)
             {
-                basePosition.parent.Rotate(Vector3.forward, 15, Space.Self);
+                Dog.transform.position = shootPosition.position;
             }
-            Debug.Log(basePosition.rotation);
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            if (basePosition.parent.rotation.z > rotateClockwise)
+            if (Input.GetKeyDown(KeyCode.G))
             {
-                basePosition.parent.Rotate(Vector3.forward, -15, Space.Self);
+                shoot();
             }
-            Debug.Log(basePosition.rotation);
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                if (basePosition.parent.rotation.z < rotateCounterClockwise)
+                {
+                    basePosition.parent.Rotate(Vector3.forward, 15, Space.Self);
+                }
+                Debug.Log(basePosition.rotation);
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                if (basePosition.parent.rotation.z > rotateClockwise)
+                {
+                    basePosition.parent.Rotate(Vector3.forward, -15, Space.Self);
+                }
+                Debug.Log(basePosition.rotation);
+            }
         }
-        //Debug.Log(shootPosition.parent.position);
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
