@@ -5,6 +5,7 @@ using UnityEngine;
 public class CannonScript : MonoBehaviour
 {
     // Start is called before the first frame update
+    bool shot = false;
     [SerializeField] float power = 10;
     private Transform shootPosition;
     private Transform basePosition;
@@ -18,6 +19,10 @@ public class CannonScript : MonoBehaviour
     {
         basePosition = GameObject.Find("CannonBase").transform;
         shootPosition = GameObject.Find("CannonHead").transform;    
+        if (!shot)
+        {
+            Dog.transform.position = shootPosition.position;
+        }
         if(Input.GetKeyDown(KeyCode.G))
         {
             shoot();
@@ -28,7 +33,11 @@ public class CannonScript : MonoBehaviour
             basePosition.parent.Rotate(Vector3.forward, 15, Space.Self);
             Debug.Log(basePosition.rotation);
         }
-
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            basePosition.parent.Rotate(Vector3.forward, -15, Space.Self);
+            Debug.Log(basePosition.rotation);
+        }
         //Debug.Log(shootPosition.parent.position);
     }
 
@@ -43,5 +52,6 @@ public class CannonScript : MonoBehaviour
         //Vector2 forceVec = new Vector2(power, power);
         Vector2 shootDir = new Vector2(shootPosition.position.x - basePosition.position.x, shootPosition.position.y - basePosition.position.y);
         rb.velocity = (power*shootDir);
+        shot = true;
     }
 }
