@@ -13,8 +13,13 @@ public class CannonScript : MonoBehaviour
 
     public float rotateClockwise = -0.5f;
     public float rotateCounterClockwise = 0.5f;
+
+    public static bool debugKeyboard = true;
+
+    inputProsessor ip;
     void Start()
     {
+        ip = GameObject.Find("input_dashboard").GetComponent<inputProsessor>();
         basePosition = transform.Find("CannonBase").transform;
         shootPosition = transform.Find("CannonBase/Cannon/CannonHead").transform;
     }
@@ -22,11 +27,23 @@ public class CannonScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(debugKeyboard)
+        {
+            debugUpdate();
+            return;
+        }
+
+
+
+    }
+
+    private void debugUpdate()
+    {
         if (Dog.GetComponent<CircleCollider2D>().IsTouching(transform.GetComponent<BoxCollider2D>()))
         {
             if (!shot)
             {
-                Dog.transform.position = shootPosition.position;
+                Dog.transform.position += (shootPosition.position - Dog.transform.position);
             }
             if (Input.GetKeyDown(KeyCode.G))
             {
@@ -50,11 +67,12 @@ public class CannonScript : MonoBehaviour
             }
         }
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Dog = collision.collider.gameObject;
         shot = false;
-        
+
     }
     private void shoot()
     {
@@ -64,11 +82,11 @@ public class CannonScript : MonoBehaviour
         GameObject cannon = GameObject.Find("Cannon");
         Animator manimator = cannon.GetComponent<Animator>();
         manimator.SetTrigger("Shoot");
-      //  Debug.Log(GetComponent<float>.power);
+        //  Debug.Log(GetComponent<float>.power);
         //Debug.Log(shootPosition.forward * power);
         //Vector2 forceVec = new Vector2(power, power);
         Vector2 shootDir = new Vector2(shootPosition.position.x - basePosition.position.x, shootPosition.position.y - basePosition.position.y);
-        rb.velocity = (power*shootDir);
+        rb.velocity = (power * shootDir);
         shot = true;
     }
 }
