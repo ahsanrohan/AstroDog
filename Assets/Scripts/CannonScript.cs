@@ -6,7 +6,7 @@ public class CannonScript : MonoBehaviour
 {
     // Start is called before the first frame update
     bool shot = false;
-    [SerializeField] float power = 10;
+    [SerializeField] static float power;
     private Transform shootPosition;
     private Transform basePosition;
     public GameObject Dog = null;
@@ -15,14 +15,14 @@ public class CannonScript : MonoBehaviour
     [SerializeField] float rotateCounterClockwise = 0.5f;
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        basePosition = GameObject.Find("CannonBase").transform;
-        shootPosition = GameObject.Find("CannonHead").transform;    
+        basePosition = transform.Find("CannonBase").transform;
+        shootPosition = transform.Find("CannonBase/Cannon/CannonHead").transform;    
         if (!shot)
         {
             Dog.transform.position = shootPosition.position;
@@ -50,14 +50,21 @@ public class CannonScript : MonoBehaviour
         }
         //Debug.Log(shootPosition.parent.position);
     }
-
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Dog = collision.collider.gameObject;
+        shot = false;
+        
+    }
     private void shoot()
     {
         // GameObject dog = Instantiate(Dog, shootPosition.position, Quaternion.identity);
 
-        GameObject dog = GameObject.Find("bubble");
-        Rigidbody2D rb = dog.GetComponent<Rigidbody2D>();
-        //Debug.Log(power);
+        Rigidbody2D rb = Dog.GetComponent<Rigidbody2D>();
+        GameObject cannon = GameObject.Find("Cannon");
+        Animator manimator = cannon.GetComponent<Animator>();
+        manimator.SetTrigger("Shoot");
+      //  Debug.Log(GetComponent<float>.power);
         //Debug.Log(shootPosition.forward * power);
         //Vector2 forceVec = new Vector2(power, power);
         Vector2 shootDir = new Vector2(shootPosition.position.x - basePosition.position.x, shootPosition.position.y - basePosition.position.y);
