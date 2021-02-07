@@ -9,18 +9,28 @@ public class ZoomScript : MonoBehaviour
     private float targetZoom;
     private float zoomFactor = 3f;
 
+    public CheckPointScript cps;
+
     [SerializeField] private float zoomLerpSpeed;
     void Start()
     {
         cam = Camera.main;
         targetZoom = cam.orthographicSize;
+
+        cps = GameObject.Find("CheckPoints").GetComponent<CheckPointScript>();
     }
 
     // Update is called once per frame
     void Update()
     {
         float zoomData = transform.parent.GetComponent<Rigidbody2D>().velocity.magnitude;
-        zoomFactor = ((zoomData / 30) * 6) - 2;
+
+        float tempPower = 60;
+        if (cps.props[cps.progress].tag == "Cannon")
+        {
+            tempPower = (cps.props[cps.progress].GetComponent<CannonScript>().power * 6) + 1;
+        }
+        zoomFactor = ((zoomData / tempPower) * 6) - 2;
         targetZoom += zoomFactor;
 
         targetZoom = Mathf.Clamp(targetZoom, 7.5f, 15f);

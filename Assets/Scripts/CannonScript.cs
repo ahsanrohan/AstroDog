@@ -84,7 +84,7 @@ public class CannonScript : MonoBehaviour
             }
 
             //POWER
-            power = (ip.getRottery_counter()/16.0f)*25;
+            power = (ip.getRottery_counter()/32.0f)*20;
 
             
                 
@@ -141,5 +141,9 @@ public class CannonScript : MonoBehaviour
         Vector2 shootDir = new Vector2(shootPosition.position.x - basePosition.position.x, shootPosition.position.y - basePosition.position.y);
         rb.velocity = (power * shootDir);
         shot = true;
+
+        yield return new WaitForSeconds(1);
+
+        shot = false;
     }
 }
