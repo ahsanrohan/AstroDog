@@ -26,6 +26,7 @@ public class inputProsessor : MonoBehaviour
     private int RotteryE_offset = 0;
 
     byte mode = 0;
+    public byte angle = 9; 
 
     float pollUpdate;
 
@@ -83,6 +84,7 @@ public class inputProsessor : MonoBehaviour
     {
         byte[] pollBuffer = new byte[10];
         pollBuffer[0] = mode;
+        pollBuffer[1] = angle;
         serialPort.Write(pollBuffer, 0, 10);
     }
 

@@ -9,7 +9,7 @@ public class CannonScript : MonoBehaviour
     public float power;
     private Transform shootPosition;
     private Transform basePosition;
-    public GameObject Dog = null;
+    private GameObject Dog;
 
     public float rotateClockwise_limit = -0.5f;
     public float rotateCounterClockwise_limit = 0.5f;
@@ -21,6 +21,7 @@ public class CannonScript : MonoBehaviour
 
     void Start()
     {
+        Dog = GameObject.Find("bubble");
         rb = Dog.GetComponent<Rigidbody2D>();
 
         //GetComponent<BoxCollider2D>().i
