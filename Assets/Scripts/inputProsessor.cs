@@ -30,7 +30,7 @@ public class inputProsessor : MonoBehaviour
     private int RotteryE_offset = 0;
 
     byte mode = 0;
-    public byte angle = 9; 
+    public byte angle = 9;
 
     float pollUpdate;
 
@@ -47,14 +47,14 @@ public class inputProsessor : MonoBehaviour
 
     void Update()
     {
-        
+
         string dataPacket = serialPort.ReadLine();
         var split = dataPacket.Split(' ');
 
         if (split.Length != 5) return;
 
-        x_joystick = (2.0f * int.Parse(split[0]) / 1023.0f)-1;
-        y_joystick = (2.0f * int.Parse(split[1]) / 1023.0f)-1;
+        x_joystick = (2.0f * int.Parse(split[0]) / 1023.0f) - 1;
+        y_joystick = (2.0f * int.Parse(split[1]) / 1023.0f) - 1;
 
         RotteryE_counter = int.Parse(split[2]);
 
@@ -91,6 +91,15 @@ public class inputProsessor : MonoBehaviour
         mode = 2;
     }
 
+    public void setGenderMode()
+    {
+        mode = 3;
+    }
+
+    public void setStandByMode()
+    {
+        mode = 0;
+    }
     public void sendPoll()
     {
         byte[] pollBuffer = new byte[10];
