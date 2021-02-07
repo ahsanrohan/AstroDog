@@ -20,6 +20,8 @@ public class CannonScript : MonoBehaviour
     inputProsessor ip;
     Rigidbody2D rb;
 
+    AudioSource audio;
+
     void Start()
     {
         Dog = GameObject.Find("bubble");
@@ -31,6 +33,8 @@ public class CannonScript : MonoBehaviour
 
         basePosition = transform.Find("CannonBase").transform;
         shootPosition = transform.Find("CannonBase/Cannon/CannonHead").transform;
+
+        audio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -84,7 +88,7 @@ public class CannonScript : MonoBehaviour
             }
 
             //POWER
-            power = (ip.getRottery_counter()/32.0f)*20;
+            //power = (ip.getRottery_counter()/32.0f)*20;
 
             
                 
@@ -141,6 +145,7 @@ public class CannonScript : MonoBehaviour
         Vector2 shootDir = new Vector2(shootPosition.position.x - basePosition.position.x, shootPosition.position.y - basePosition.position.y);
         rb.velocity = (power * shootDir);
         shot = true;
+        audio.Play(0);
 
         yield return new WaitForSeconds(1);
 
