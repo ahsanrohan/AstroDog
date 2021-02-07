@@ -7,13 +7,6 @@ public class inputProsessor : MonoBehaviour
 {
     // Start is called before the first frame update
     static SerialPort serialPort;
-    void Start()
-    {
-        serialPort = new SerialPort();
-        serialPort.PortName = "COM7";
-        serialPort.BaudRate = 9600;
-        serialPort.Open();
-    }
 
     //DATA PACKAGE ORDER
     //LEFT_VRX 0 to 1023
@@ -25,30 +18,72 @@ public class inputProsessor : MonoBehaviour
     ///0 to 1 floating point Center at 0.5
     public float y_joystick = 0;
 
+    //Push Down Buttons
+    public bool joystrick_held;
+    public bool RotteryE_held;
+
     private int RotteryE_counter = 0;
     private int RotteryE_offset = 0;
 
+    byte mode = 0;
+
+    float pollUpdate;
+
+    void Start()
+    {
+        serialPort = new SerialPort();
+        serialPort.PortName = "COM7";
+        serialPort.BaudRate = 19200;
+        serialPort.Open();
+
+        pollUpdate = Time.time;
+
+    }
+
     void Update()
     {
+        
         string dataPacket = serialPort.ReadLine();
-
         var split = dataPacket.Split(' ');
+
+        if (split.Length != 5) return;
 
         x_joystick = (2.0f * int.Parse(split[0]) / 1023.0f)-1;
         y_joystick = (2.0f * int.Parse(split[1]) / 1023.0f)-1;
 
         RotteryE_counter = int.Parse(split[2]);
 
+        joystrick_held = !(int.Parse(split[3]) != 0);
+
+        RotteryE_held = !(int.Parse(split[4]) != 0);
+
+        if(Time.time - pollUpdate > 1)
+        {
+            sendPoll();
+            pollUpdate = Time.time;
+        }
     }
 
-    int getRottery_counter()
+    public int getRottery_counter()
     {
         return RotteryE_counter - RotteryE_offset;
     }
 
-    void resetRottery_counter()
+    public void resetRottery_counter()
     {
         RotteryE_offset = RotteryE_counter;
+    }
+
+    public void setCannonMode()
+    {
+        mode = 0b1;
+    }
+
+    public void sendPoll()
+    {
+        byte[] pollBuffer = new byte[10];
+        pollBuffer[0] = mode;
+        serialPort.Write(pollBuffer, 0, 10);
     }
 
 }
