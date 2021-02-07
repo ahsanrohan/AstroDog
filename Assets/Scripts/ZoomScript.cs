@@ -23,7 +23,15 @@ public class ZoomScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float zoomData = transform.parent.GetComponent<Rigidbody2D>().velocity.magnitude;
+        float zoomData = 0;
+        var a = transform.parent.GetComponent<Rigidbody2D>();
+        if (a != null)
+        {
+            zoomData = transform.parent.GetComponent<Rigidbody2D>().velocity.magnitude;
+
+        }
+            
+
 
         float tempPower = 60;
         if (cps.props[cps.progress].tag == "Cannon")

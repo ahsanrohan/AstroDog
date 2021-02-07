@@ -79,7 +79,7 @@ public class CannonScript : MonoBehaviour
                     !((basePosition.parent.rotation.z < rotateClockwise_limit)          && ip.x_joystick < 0) &&
                     !((basePosition.parent.rotation.z > rotateCounterClockwise_limit)   && ip.x_joystick > 0)
                    )
-                    basePosition.parent.Rotate(Vector3.forward, ip.x_joystick, Space.Self);
+                    basePosition.parent.Rotate(Vector3.forward, -ip.x_joystick, Space.Self);
                 
             }
 

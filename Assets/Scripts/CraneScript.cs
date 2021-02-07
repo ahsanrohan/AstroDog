@@ -7,19 +7,22 @@ public class CraneScript : MonoBehaviour
     bool released = false;
     bool active = false;
     bool hooked = false;
-    // Start is called before the first frame update
-    private Transform pivotPoint;
+
     private Transform arm;
     private Transform hand;
-    public GameObject Dog = null;
+    public GameObject Dog;
+    public GameObject cam;
+
+    inputProsessor ip;
 
     Rigidbody2D rb;
     void Start()
     {
-        //pivotPoint = GameObject.Find("RotatePoint").transform;
         arm = GameObject.Find("Crane Hand 2.1").transform;
         hand = GameObject.Find("Hand").transform;
+        cam = GameObject.Find("Main Camera");
 
+        ip = GameObject.Find("input_dashboard").GetComponent<inputProsessor>();
         rb = Dog.GetComponent<Rigidbody2D>();
     }
 
@@ -29,56 +32,63 @@ public class CraneScript : MonoBehaviour
         if ((transform.position - Dog.transform.position).magnitude < 10)
         {
             active = true;
-            faceMouse();
+
+            faceJoyStick();
+            //faceMouse();
         }
 
-        /*if (released == false && (hand.position - Dog.transform.position).magnitude < 1)
-        {
-            hooked = true;
-            //Debug.Log(hooked);
-            //Camera cam = GameObject.Find("Main Camera").GetComponent<Camera>();
-            //cam.transform.parent = transform;
-        }
-        else
-        {
-            //Camera cam = GameObject.Find("Main Camera").GetComponent<Camera>();
-            //cam.transform.parent = Dog.transform;
-        }*/
 
         if (Dog.GetComponent<CircleCollider2D>().IsTouching(transform.GetComponent<BoxCollider2D>()))
         {
-            //if (!released)
-            {
-                rb.velocity -= rb.velocity * 0.05f;
-                var delta = hand.position - Dog.transform.position;
+            rb.velocity -= rb.velocity * 0.05f;
+            var delta = hand.position - Dog.transform.position;
 
-                //Aproach 
-                if (delta.magnitude < 1.5f && !released)
+            //Aproach 
+            if (delta.magnitude < 1.5f && !released)
+            {
+                Dog.transform.position = hand.transform.position;
+                rb.velocity = new Vector2(0, 0);
+
+                cam.transform.parent = transform;
+                cam.transform.localPosition = new Vector3(0, 0, -10);
+            }
+            else
+            {
+                var vel = delta.normalized * 500 * Time.deltaTime;
+                if (!released)
                 {
-                    Dog.transform.position = hand.transform.position;
-                    rb.velocity = new Vector2(0, 0);
+                    rb.velocity += new Vector2(vel.x, vel.y);
                 }
                 else
                 {
-                    var vel = delta.normalized * 500 * Time.deltaTime;
-                    if (!released)
-                    {
-                        rb.velocity += new Vector2(vel.x, vel.y);
-                    }
-                    else
-                    {
-                        rb.velocity += rb.velocity * Time.deltaTime;
-                    }
+                    rb.velocity += rb.velocity * Time.deltaTime;
                 }
             }
+
         }
 
         if (Input.GetKeyDown(KeyCode.G) && active)
         {
             released = true;
+            cam.transform.parent = Dog.transform;
+            cam.transform.localPosition = new Vector3(0, 0, -10);
         }
     }
 
+    float curX = 0.5f;
+    float curY = 0.5f;
+    void faceJoyStick()
+    {
+        var x = ip.x_joystick;
+        var y = ip.y_joystick;
+
+        var dir = new Vector2(y, x);
+        var mag = Mathf.Clamp(dir.magnitude, 0.2f, 1.0f);
+        arm.gameObject.transform.localScale = new Vector3(1, mag, 1);
+
+        arm.up = dir;
+
+    }
     void faceMouse()
     {
         Vector3 mousePos = Input.mousePosition;
@@ -102,7 +112,7 @@ public class CraneScript : MonoBehaviour
         float diff = dist.magnitude - distFromArm.magnitude;
 
         if (dist.magnitude < distFromArm.magnitude) //mouse is closer to pivot point than arm
-        {   
+        {
             if (arm.gameObject.transform.localScale.y > 0.2f)
             {
                 arm.gameObject.transform.localScale += new Vector3(0, diff, 0);
