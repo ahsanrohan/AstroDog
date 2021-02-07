@@ -114,4 +114,8 @@ public class inputProsessor : MonoBehaviour
         serialPort.Write(pollBuffer, 0, 10);
     }
 
+    public void close()
+    {
+        serialPort.Close();
+    }
 }
