@@ -22,6 +22,10 @@ public class inputProsessor : MonoBehaviour
     public bool joystrick_held;
     public bool RotteryE_held;
 
+    public byte gender = 0;
+    //1 for Byte
+    //2 for Tera Byte
+
     private int RotteryE_counter = 0;
     private int RotteryE_offset = 0;
 
@@ -58,7 +62,9 @@ public class inputProsessor : MonoBehaviour
 
         RotteryE_held = !(int.Parse(split[4]) != 0);
 
-        if(Time.time - pollUpdate > 1)
+        gender = (byte)int.Parse(split[5]);
+
+        if (Time.time - pollUpdate > 1)
         {
             sendPoll();
             pollUpdate = Time.time;
