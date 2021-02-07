@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CheckPointScript : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class CheckPointScript : MonoBehaviour
     public bool attachedToObject = false;
     public GameObject[] checkPoints;
     public GameObject[] props;
+
+    AudioSource audio;
+    float timer = 0;
     void Start()
     {
         bubble = GameObject.Find("bubble");
@@ -29,6 +33,7 @@ public class CheckPointScript : MonoBehaviour
         }
 
         progress = 0;
+        audio = GetComponent<AudioSource>();
     }
 
     
@@ -68,6 +73,12 @@ public class CheckPointScript : MonoBehaviour
 
         } else
         {
+            audio.Play(0);
+            timer += Time.deltaTime;
+            if (timer >= 1.5)
+            {
+                SceneManager.LoadScene("Level2");
+            }
             //END EACHED
         }
     }
