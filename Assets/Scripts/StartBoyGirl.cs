@@ -49,6 +49,7 @@ public class StartBoyGirl : MonoBehaviour
             //WaitForSeconds(2.0f);
             if (timer >= 2.5)
             {
+                ip.close();
                 SceneManager.LoadScene(boy);
             }
         }
@@ -62,7 +63,9 @@ public class StartBoyGirl : MonoBehaviour
             //yield return new WaitForSeconds(2.0f);
             if (timer >= 2.5)
             {
+                ip.close();
                 SceneManager.LoadScene(girl);
+                
             }
 
         }
