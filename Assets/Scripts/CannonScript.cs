@@ -12,8 +12,8 @@ public class CannonScript : MonoBehaviour
     private Transform basePosition;
     public GameObject Dog = null;
 
-    public float rotateClockwise = -0.5f;
-    public float rotateCounterClockwise = 0.5f;
+    public float rotateClockwise_limit = -0.5f;
+    public float rotateCounterClockwise_limit = 0.5f;
 
     public static bool debugKeyboard = true;
 
@@ -35,23 +35,32 @@ public class CannonScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        var x = ip.x_joystick;
+        var y = ip.y_joystick;
+
         if (debugKeyboard)
         {
             debugUpdate();
-            return;
         }
 
         if (Dog.GetComponent<CircleCollider2D>().IsTouching(transform.GetComponent<BoxCollider2D>()))
         {
+            ip.setCannonMode();
+            //Soft Capture
             if (!shot)
             {
                 rb.velocity -= rb.velocity * 0.1f;
                 var delta = shootPosition.position - Dog.transform.position;
 
+                //Snap Mode
                 if (delta.magnitude < 0.2)
                 {
                     Dog.transform.position = shootPosition.transform.position;
                     rb.velocity = new Vector2(0, 0);
+
+                    //Only Shoot If It Is within snap
+                    if (ip.RotteryE_held)
+                        StartCoroutine(shoot());
                 }
                 else
                 {
@@ -59,6 +68,26 @@ public class CannonScript : MonoBehaviour
                     rb.velocity += new Vector2(vel.x, vel.y);
                 }
             }
+
+
+            //ROATE
+            var b = basePosition.parent.rotation;
+            if (Mathf.Abs(ip.x_joystick) > 0.1f)
+            {
+                if (
+                    !((basePosition.parent.rotation.z < rotateClockwise_limit)          && ip.x_joystick < 0) &&
+                    !((basePosition.parent.rotation.z > rotateCounterClockwise_limit)   && ip.x_joystick > 0)
+                   )
+                    basePosition.parent.Rotate(Vector3.forward, ip.x_joystick, Space.Self);
+                
+            }
+
+            //POWER
+            power = (ip.getRottery_counter()/16.0f)*25;
+
+            
+                
+
         }
     }
 
@@ -66,29 +95,13 @@ public class CannonScript : MonoBehaviour
     {
         if (Dog.GetComponent<CircleCollider2D>().IsTouching(transform.GetComponent<BoxCollider2D>()))
         {
-            if (!shot)
-            {
-                rb.velocity -= rb.velocity * 0.1f;
-                var delta = shootPosition.position - Dog.transform.position;
-
-                if (delta.magnitude < 0.2)
-                {
-                    Dog.transform.position = shootPosition.transform.position;
-                    rb.velocity = new Vector2(0, 0);
-                }
-                else
-                {
-                    var vel = delta.normalized * 100 * Time.deltaTime;
-                    rb.velocity += new Vector2(vel.x, vel.y);
-                }
-            }
             if (Input.GetKeyDown(KeyCode.G))
             {
                 StartCoroutine(shoot());
             }
             if (Input.GetKeyDown(KeyCode.A))
             {
-                if (basePosition.parent.rotation.z < rotateCounterClockwise)
+                if (basePosition.parent.rotation.z < rotateCounterClockwise_limit)
                 {
                     basePosition.parent.Rotate(Vector3.forward, 15, Space.Self);
                 }
@@ -96,7 +109,7 @@ public class CannonScript : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
-                if (basePosition.parent.rotation.z > rotateClockwise)
+                if (basePosition.parent.rotation.z > rotateClockwise_limit)
                 {
                     basePosition.parent.Rotate(Vector3.forward, -15, Space.Self);
                 }

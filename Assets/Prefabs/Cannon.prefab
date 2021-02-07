@@ -180,8 +180,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   power: 10
   Dog: {fileID: 0}
-  rotateClockwise: -0.5
-  rotateCounterClockwise: 0.5
+  rotateClockwise_limit: -0.5
+  rotateCounterClockwise_limit: 0.5
 --- !u!61 &7483349942667246247
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -195,7 +195,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.47735763, y: 2.0846157}
+  m_Offset: {x: 0.48743677, y: 1.9435046}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -206,7 +206,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 7.0678067, y: 7.8795023}
+  m_Size: {x: 7.32987, y: 8.161724}
   m_EdgeRadius: 0
 --- !u!1 &7483349942685315317
 GameObject:
