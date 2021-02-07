@@ -13,22 +13,23 @@ public class CheckPointScript : MonoBehaviour
     public int progress;
 
     public bool attachedToObject = false;
-    public GameObject[] c;
+    public GameObject[] checkPoints;
+    public GameObject[] props;
+    public GameObject test;
     void Start()
     {
         bubble = GameObject.Find("bubble");
         rb = bubble.GetComponent<Rigidbody2D>();
         ip = GameObject.Find("input_dashboard").GetComponent<inputProsessor>();
 
-        c = new GameObject[numberOfCheckPoints];
+        checkPoints = new GameObject[numberOfCheckPoints];
 
         for (int i = 0; i < numberOfCheckPoints; i++)
         {
-            c[i] = GameObject.Find("c" + i.ToString());
-            Debug.Log("C" + i.ToString());
+            checkPoints[i] = GameObject.Find("c" + i.ToString());
         }
 
-        progress = -1;
+        progress = 0;
     }
 
     
@@ -36,16 +37,46 @@ public class CheckPointScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < c.Length; i++)
+        //PROGRESS UPDATE
+        for (int i = 0; i < checkPoints.Length; i++)
         {
-            if (c[i].GetComponent<BoxCollider2D>().IsTouching(bubble.GetComponent<CircleCollider2D>()))
+            if (checkPoints[i].GetComponent<BoxCollider2D>().IsTouching(bubble.GetComponent<CircleCollider2D>()))
             {
-                if(progress < i)
+                if(progress < i+1)
                 {
-                    progress = i;
+                    progress = i+1;
                 }
             }
         }
-        
+
+
+        //RESET TEMP
+        //TODO SWICH OVER TO BUTTON
+        if (ip.joystrick_held)
+        {
+            rb.velocity = Vector3.zero;
+            bubble.transform.position = props[progress].transform.position;
+        }
+
+
+        //Update Arrow
+        if (true)//(progress < checkPoints.Length)
+        {
+
+
+            Vector3 direction = checkPoints[progress].transform.position - bubble.transform.position;
+
+
+
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            
+            Debug.Log((byte)((180 - angle) / 45));
+
+            ip.angle = (byte)((180 - angle) / 45);
+
+        } else
+        {
+            //END EACHED
+        }
     }
 }
