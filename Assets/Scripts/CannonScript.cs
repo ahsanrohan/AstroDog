@@ -84,7 +84,7 @@ public class CannonScript : MonoBehaviour
             }
 
             //POWER
-            power = (ip.getRottery_counter()/32.0f)*20;
+           // power = (ip.getRottery_counter()/32.0f)*20;
 
             
                 
