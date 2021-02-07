@@ -15,7 +15,6 @@ public class CheckPointScript : MonoBehaviour
     public bool attachedToObject = false;
     public GameObject[] checkPoints;
     public GameObject[] props;
-    public GameObject test;
     void Start()
     {
         bubble = GameObject.Find("bubble");
@@ -60,7 +59,7 @@ public class CheckPointScript : MonoBehaviour
 
 
         //Update Arrow
-        if (true)//(progress < checkPoints.Length)
+        if(progress < checkPoints.Length)
         {
 
 
@@ -69,9 +68,7 @@ public class CheckPointScript : MonoBehaviour
 
 
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            
-            Debug.Log((byte)((180 - angle) / 45));
-
+          
             ip.angle = (byte)((180 - angle) / 45);
 
         } else

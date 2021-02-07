@@ -17,7 +17,7 @@ public class ZoomScript : MonoBehaviour
         cam = Camera.main;
         targetZoom = cam.orthographicSize;
 
-        cps = GameObject.Find("CheckPoints").GetComponent<CheckPointScript>();
+        cps = GameObject.Find("CheckPoint").GetComponent<CheckPointScript>();
     }
 
     // Update is called once per frame
