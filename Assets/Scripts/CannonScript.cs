@@ -6,6 +6,7 @@ public class CannonScript : MonoBehaviour
 {
     // Start is called before the first frame update
     bool shot = false;
+    bool active = false;
     public float power;
     private Transform shootPosition;
     private Transform basePosition;
@@ -59,8 +60,6 @@ public class CannonScript : MonoBehaviour
                 }
             }
         }
-
-
     }
 
     private void debugUpdate()
@@ -93,7 +92,7 @@ public class CannonScript : MonoBehaviour
                 {
                     basePosition.parent.Rotate(Vector3.forward, 15, Space.Self);
                 }
-                Debug.Log(basePosition.rotation);
+                //Debug.Log(basePosition.rotation);
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
@@ -101,7 +100,7 @@ public class CannonScript : MonoBehaviour
                 {
                     basePosition.parent.Rotate(Vector3.forward, -15, Space.Self);
                 }
-                Debug.Log(basePosition.rotation);
+                //Debug.Log(basePosition.rotation);
             }
         }
     }
