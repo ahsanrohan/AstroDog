@@ -77,7 +77,12 @@ public class inputProsessor : MonoBehaviour
 
     public void setCannonMode()
     {
-        mode = 0b1;
+        mode = 1;
+    }
+
+    public void setCraneMode()
+    {
+        mode = 2;
     }
 
     public void sendPoll()
