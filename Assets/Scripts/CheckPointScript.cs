@@ -74,11 +74,11 @@ public class CheckPointScript : MonoBehaviour
         } else
         {
             audio.Play(0);
-            timer += Time.deltaTime;
-            if (timer >= 1.5)
-            {
-                SceneManager.LoadScene("Level2");
-            }
+            //timer += Time.deltaTime;
+            //if (timer >= 1.5)
+            //{
+            //    SceneManager.LoadScene("Level2");
+            //}
             //END EACHED
         }
     }
