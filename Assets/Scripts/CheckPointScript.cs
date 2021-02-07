@@ -60,7 +60,7 @@ public class CheckPointScript : MonoBehaviour
 
 
         //Update Arrow
-        if (true)//(progress < checkPoints.Length)
+        if(progress < checkPoints.Length)
         {
 
 
