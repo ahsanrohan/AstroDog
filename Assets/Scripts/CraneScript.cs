@@ -25,6 +25,15 @@ public class CraneScript : MonoBehaviour
         ip = GameObject.Find("input_dashboard").GetComponent<inputProsessor>();
         rb = Dog.GetComponent<Rigidbody2D>();
     }
+    IEnumerator release()
+    {
+        released = true;
+        cam.transform.parent = Dog.transform;
+        cam.transform.localPosition = new Vector3(0, 0, -10);
+        yield return new WaitForSeconds(2.0f);
+        released = false;
+
+    }
 
     // Update is called once per frame
     void Update()
@@ -32,7 +41,7 @@ public class CraneScript : MonoBehaviour
         if ((transform.position - Dog.transform.position).magnitude < 10)
         {
             active = true;
-
+            ip.setCraneMode();
             faceJoyStick();
             //faceMouse();
         }
@@ -54,7 +63,7 @@ public class CraneScript : MonoBehaviour
             }
             else
             {
-                var vel = delta.normalized * 500 * Time.deltaTime;
+                var vel = delta.normalized * 200 * Time.deltaTime;
                 if (!released)
                 {
                     rb.velocity += new Vector2(vel.x, vel.y);
@@ -67,13 +76,13 @@ public class CraneScript : MonoBehaviour
 
         }
 
-        if (Input.GetKeyDown(KeyCode.G) && active)
+        if (ip.RotteryE_held && active)
         {
-            released = true;
-            cam.transform.parent = Dog.transform;
-            cam.transform.localPosition = new Vector3(0, 0, -10);
+            StartCoroutine(release());
         }
     }
+
+    
 
     float curX = 0.5f;
     float curY = 0.5f;
@@ -87,6 +96,8 @@ public class CraneScript : MonoBehaviour
         arm.gameObject.transform.localScale = new Vector3(1, mag, 1);
 
         arm.up = dir;
+
+
 
     }
     void faceMouse()
