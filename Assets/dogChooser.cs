@@ -8,8 +8,13 @@ public class dogChooser : MonoBehaviour
     int chooser = 1;
     GameObject boy;
     GameObject girl;
+
+    inputProsessor ip;
     void Start()
     {
+        ip = GameObject.Find("input_dashboard").GetComponent<inputProsessor>();
+
+        chooser = ip.gender;
         boy = GameObject.Find("BoyDog");
         girl = GameObject.Find("GirlDog");
 
