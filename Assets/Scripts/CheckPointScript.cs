@@ -61,12 +61,7 @@ public class CheckPointScript : MonoBehaviour
         //Update Arrow
         if(progress < checkPoints.Length)
         {
-
-
             Vector3 direction = checkPoints[progress].transform.position - bubble.transform.position;
-
-
-
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
           
             ip.angle = (byte)((180 - angle) / 45);
