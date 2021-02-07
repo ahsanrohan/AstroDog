@@ -16,6 +16,7 @@ public class CraneScript : MonoBehaviour
     inputProsessor ip;
 
     Rigidbody2D rb;
+    AudioSource audio;
     void Start()
     {
         arm = GameObject.Find("Crane Hand 2.1").transform;
@@ -24,6 +25,7 @@ public class CraneScript : MonoBehaviour
 
         ip = GameObject.Find("input_dashboard").GetComponent<inputProsessor>();
         rb = Dog.GetComponent<Rigidbody2D>();
+        audio = GetComponent<AudioSource>();
     }
     IEnumerator release()
     {
@@ -32,7 +34,7 @@ public class CraneScript : MonoBehaviour
         cam.transform.localPosition = new Vector3(0, 0, -10);
         yield return new WaitForSeconds(2.0f);
         released = false;
-
+        audio.Play(0);
     }
 
     // Update is called once per frame
@@ -55,6 +57,8 @@ public class CraneScript : MonoBehaviour
             //Aproach 
             if (delta.magnitude < 1.5f && !released)
             {
+                audio.Play(0);
+
                 Dog.transform.position = hand.transform.position;
                 rb.velocity = new Vector2(0, 0);
 

@@ -12,6 +12,13 @@ public class StartBoyGirl : MonoBehaviour
     private string boy;
     [SerializeField]
     private string girl;
+
+    float timer = 0;
+    AudioSource audio;
+    void Start()
+    {
+        audio = GetComponent<AudioSource>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -26,12 +33,29 @@ public class StartBoyGirl : MonoBehaviour
 
         if(whom == 1)
         {
-            SceneManager.LoadScene(boy);
-
+            if (timer == 0)
+            {
+                audio.Play(0);
+            }
+            timer += Time.deltaTime;
+            //WaitForSeconds(2.0f);
+            if (timer >= 2.5)
+            {
+                SceneManager.LoadScene(boy);
+            }
         }
         else if(whom == 2)
         {
-            SceneManager.LoadScene(girl);
+            if (timer == 0)
+            {
+                audio.Play(0);
+            }
+            timer += Time.deltaTime;
+            //yield return new WaitForSeconds(2.0f);
+            if (timer >= 2.5)
+            {
+                SceneManager.LoadScene(girl);
+            }
 
         }
     }
