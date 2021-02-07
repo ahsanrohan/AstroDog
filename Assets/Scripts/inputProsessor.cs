@@ -41,17 +41,20 @@ public class inputProsessor : MonoBehaviour
         serialPort.BaudRate = 19200;
         serialPort.Open();
 
+        serialPort.WriteTimeout = 10;
+
         pollUpdate = Time.time;
 
     }
 
     void Update()
     {
-
         string dataPacket = serialPort.ReadLine();
+
+        
         var split = dataPacket.Split(' ');
 
-        if (split.Length != 5) return;
+        if (split.Length != 6) return;
 
         x_joystick = (2.0f * int.Parse(split[0]) / 1023.0f) - 1;
         y_joystick = (2.0f * int.Parse(split[1]) / 1023.0f) - 1;
@@ -64,8 +67,11 @@ public class inputProsessor : MonoBehaviour
 
         gender = (byte)int.Parse(split[5]);
 
+
         if (Time.time - pollUpdate > 1)
         {
+            
+
             sendPoll();
             pollUpdate = Time.time;
         }

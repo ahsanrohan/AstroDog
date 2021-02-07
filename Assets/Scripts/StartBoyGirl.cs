@@ -12,16 +12,21 @@ public class StartBoyGirl : MonoBehaviour
     private string boy;
     [SerializeField]
     private string girl;
+    inputProsessor ip;
 
     float timer = 0;
     AudioSource audio;
     void Start()
     {
+        ip = GameObject.Find("input_dashboard").GetComponent<inputProsessor>();
+        
         audio = GetComponent<AudioSource>();
     }
     // Update is called once per frame
     void Update()
     {
+        ip.setGenderMode();
+
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             whom = 1;
@@ -30,6 +35,9 @@ public class StartBoyGirl : MonoBehaviour
         {
             whom = 2;
         }
+
+
+        whom = ip.gender;
 
         if(whom == 1)
         {
