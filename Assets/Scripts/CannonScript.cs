@@ -133,7 +133,7 @@ public class CannonScript : MonoBehaviour
     {
         // GameObject dog = Instantiate(Dog, shootPosition.position, Quaternion.identity);
 
-        GameObject cannon = GameObject.Find("Cannon");
+        GameObject cannon = transform.Find("CannonBase/Cannon").gameObject; //GameObject.Find("Cannon");
         Animator manimator = cannon.GetComponent<Animator>();
         manimator.SetTrigger("Shoot");
 

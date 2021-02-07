@@ -8,6 +8,7 @@ public class MoveScript : MonoBehaviour
     public float step = 1.0f;
     private int current = 0;
     private bool goingUp = true;
+    [SerializeField] bool vertical = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,13 +28,29 @@ public class MoveScript : MonoBehaviour
         }
         if (goingUp)
         {
-            transform.position = new Vector2(transform.position.x + step*Time.deltaTime, transform.position.y);
-            current++;
+            if (vertical)
+            {
+                transform.position = new Vector2(transform.position.x, transform.position.y + step * Time.deltaTime * 2);
+                current++;
+            }
+            else
+            {
+                transform.position = new Vector2(transform.position.x + step * Time.deltaTime, transform.position.y);
+                current++;
+            }
         }
         else
         {
-            transform.position = new Vector2(transform.position.x - step * Time.deltaTime, transform.position.y);
-            current--;
+            if (vertical)
+            {
+                transform.position = new Vector2(transform.position.x, transform.position.y - step * Time.deltaTime * 2);
+                current--;
+            }
+            else
+            {
+                transform.position = new Vector2(transform.position.x - step * Time.deltaTime, transform.position.y);
+                current--;
+            }
         }
     }
 }
